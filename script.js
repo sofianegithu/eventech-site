@@ -3,6 +3,84 @@
 (function () {
   'use strict';
 
+  // ---- Rotating word in hero title
+  const rotator = document.querySelector('.hero__rotator');
+  if (rotator) {
+    const words = Array.from(rotator.querySelectorAll('span'));
+    if (words.length > 1) {
+      let idx = 0;
+      const cycle = () => {
+        const current = words[idx];
+        const nextIdx = (idx + 1) % words.length;
+        const next = words[nextIdx];
+        current.classList.remove('is-active');
+        current.classList.add('is-leaving');
+        next.classList.add('is-active');
+        // Update aria-label for accessibility
+        rotator.setAttribute('aria-label', next.textContent);
+        // Cleanup after transition
+        setTimeout(() => current.classList.remove('is-leaving'), 520);
+        idx = nextIdx;
+      };
+      // Start cycling every 2.6s — pauses on tab hidden to be respectful
+      let timer = setInterval(cycle, 2600);
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          clearInterval(timer);
+        } else {
+          timer = setInterval(cycle, 2600);
+        }
+      });
+    }
+  }
+
+  // ---- Count-up animation for hero stats
+  const counters = document.querySelectorAll('[data-count]');
+  if (counters.length) {
+    const formatNumber = (n, target) => {
+      // If target has a decimal, preserve it
+      const decimals = (String(target).split('.')[1] || '').length;
+      return decimals ? n.toFixed(decimals) : Math.round(n).toString();
+    };
+    const animateCount = (el) => {
+      const target = parseFloat(el.dataset.count);
+      const suffix = el.dataset.suffix || '';
+      const duration = 1400;
+      const start = performance.now();
+      const step = (now) => {
+        const t = Math.min((now - start) / duration, 1);
+        // easeOutCubic
+        const eased = 1 - Math.pow(1 - t, 3);
+        el.textContent = formatNumber(target * eased, target) + suffix;
+        if (t < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animateCount(entry.target);
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+      counters.forEach((c) => {
+        // Start from 0 visually before observer fires
+        const suffix = c.dataset.suffix || '';
+        c.textContent = '0' + suffix;
+        io.observe(c);
+      });
+    } else {
+      // Fallback: just set the final values
+      counters.forEach((c) => {
+        const target = parseFloat(c.dataset.count);
+        const suffix = c.dataset.suffix || '';
+        c.textContent = Math.round(target) + suffix;
+      });
+    }
+  }
+
   // ---- Nav scroll state
   const nav = document.querySelector('.nav');
   const onScroll = () => {
