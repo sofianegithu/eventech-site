@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eventech — Intelligence, Engineered.</title>
+  <meta name="description" content="Eventech is a Silicon Valley AI company building automation, intelligent websites & apps, and custom AI solutions for the next generation of business." />
+  <meta name="theme-color" content="#000000" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23000'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-family='Inter,sans-serif' font-size='56' font-weight='800' fill='%23fff'%3EE%3C/text%3E%3C/svg%3E" />
+</head>
+<body>
+  <!-- Noise overlay -->
+  <div class="noise" aria-hidden="true"></div>
+
+  <!-- Cursor follower (subtle dot) -->
+  <div class="cursor-dot" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <header class="nav">
+    <div class="nav__inner">
+      <a href="#top" class="nav__logo" aria-label="Eventech home">
+        <span class="nav__logo-mark">◐</span>
+        <span class="nav__logo-text">Eventech</span>
+      </a>
+      <nav class="nav__links" aria-label="Primary">
+        <a href="#services">Services</a>
+        <a href="#process">Process</a>
+        <a href="#about">About</a>
+        <a href="#contact" class="nav__cta">
+          <span>Start a project</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero__grid" aria-hidden="true"></div>
+      <div class="container">
+        <div class="hero__eyebrow">
+          <span class="dot"></span>
+          <span>San Francisco · Palo Alto · New York</span>
+        </div>
+        <h1 class="hero__title">
+          <span class="line">Intelligence,</span>
+          <span class="line"><em>engineered</em>.</span>
+        </h1>
+        <p class="hero__sub">
+          We build AI systems that run your business. Automation, intelligent products, and bespoke models — shipped by a team that's been shipping since the first transformer.
+        </p>
+        <div class="hero__actions">
+          <a href="#contact" class="btn btn--primary">
+            <span>Start a project</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#services" class="btn btn--ghost">
+            <span>See what we build</span>
+          </a>
+        </div>
+        <div class="hero__meta">
+          <div class="meta-item">
+            <div class="meta-item__num">$50B+</div>
+            <div class="meta-item__label">Valuation</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-item__num">240+</div>
+            <div class="meta-item__label">Engineers & researchers</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-item__num">1,200</div>
+            <div class="meta-item__label">AI systems in production</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-item__num">99.99%</div>
+            <div class="meta-item__label">Uptime SLA</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Marquee strip -->
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee__track">
+          <span>AGENTS</span><span>·</span>
+          <span>LLM OPS</span><span>·</span>
+          <span>COMPUTER USE</span><span>·</span>
+          <span>RAG</span><span>·</span>
+          <span>FINE-TUNING</span><span>·</span>
+          <span>EVALS</span><span>·</span>
+          <span>AGENTS</span><span>·</span>
+          <span>LLM OPS</span><span>·</span>
+          <span>COMPUTER USE</span><span>·</span>
+          <span>RAG</span><span>·</span>
+          <span>FINE-TUNING</span><span>·</span>
+          <span>EVALS</span><span>·</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trusted by / Logo strip -->
+    <section class="logos">
+      <div class="container">
+        <p class="logos__label">Trusted by category-defining teams</p>
+        <div class="logos__row">
+          <div class="logo-cell">NORTHWIND</div>
+          <div class="logo-cell">HELIOS</div>
+          <div class="logo-cell">OBSIDIAN</div>
+          <div class="logo-cell">CASCADE</div>
+          <div class="logo-cell">PARALLEL</div>
+          <div class="logo-cell">ATLAS/9</div>
+          <div class="logo-cell">MERIDIAN</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services" class="services">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-head__num">01 / Services</div>
+          <h2 class="section-head__title">Three ways we make AI real for your business.</h2>
+          <p class="section-head__sub">No demos. No pilots. Production-grade systems, deployed in weeks — not quarters.</p>
+        </div>
+
+        <div class="services__grid">
+          <article class="service-card">
+            <div class="service-card__num">01</div>
+            <div class="service-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="32" cy="32" r="22"/>
+                <circle cx="32" cy="32" r="14"/>
+                <circle cx="32" cy="32" r="6" fill="currentColor"/>
+                <path d="M32 4v8M32 52v8M4 32h8M52 32h8M11 11l6 6M47 47l6 6M11 53l6-6M47 17l6-6"/>
+              </svg>
+            </div>
+            <h3 class="service-card__title">AI Automation</h3>
+            <p class="service-card__desc">Replace the workflows that drain your team. Agents that read inboxes, file tickets, update CRMs, and close the loop with the rest of your stack — 24/7, audited end-to-end.</p>
+            <ul class="service-card__list">
+              <li>Agentic process automation</li>
+              <li>Document & email understanding</li>
+              <li>Enterprise system integrations</li>
+              <li>Continuous evals & guardrails</li>
+            </ul>
+            <a href="#contact" class="service-card__link">
+              <span>Discuss your workflow</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </a>
+          </article>
+
+          <article class="service-card service-card--featured">
+            <div class="service-card__num">02</div>
+            <div class="service-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="6" y="10" width="52" height="40" rx="2"/>
+                <path d="M6 18h52"/>
+                <circle cx="12" cy="14" r="1" fill="currentColor"/>
+                <circle cx="16" cy="14" r="1" fill="currentColor"/>
+                <path d="M14 28h12M14 34h20M14 40h16"/>
+                <path d="M44 26l8 4-8 4z" fill="currentColor"/>
+              </svg>
+            </div>
+            <h3 class="service-card__title">AI Websites & Apps</h3>
+            <p class="service-card__desc">Marketing sites, SaaS products, and internal tools that put AI at the center of the experience. Designed, engineered, and shipped by one team — with model behavior tuned to your data.</p>
+            <ul class="service-card__list">
+              <li>Brand & product design</li>
+              <li>Web & mobile engineering</li>
+              <li>Embedded AI features & copilots</li>
+              <li>Edge-deployed inference</li>
+            </ul>
+            <a href="#contact" class="service-card__link">
+              <span>See product work</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </a>
+          </article>
+
+          <article class="service-card">
+            <div class="service-card__num">03</div>
+            <div class="service-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M8 56V20l24-12 24 12v36"/>
+                <path d="M8 20l24 12 24-12"/>
+                <path d="M32 32v24"/>
+                <circle cx="32" cy="32" r="2" fill="currentColor"/>
+                <path d="M20 44l24-12M44 44L20 32"/>
+              </svg>
+            </div>
+            <h3 class="service-card__title">Custom AI Solutions</h3>
+            <p class="service-card__desc">Bespoke models, retrieval pipelines, and AI-native infrastructure for problems off-the-shelf APIs can't solve. From architecture review to production deployment.</p>
+            <ul class="service-card__list">
+              <li>Domain-specific fine-tuning</li>
+              <li>Vector & hybrid retrieval</li>
+              <li>Multi-agent orchestration</li>
+              <li>On-prem & VPC deployment</li>
+            </ul>
+            <a href="#contact" class="service-card__link">
+              <span>Brief our research team</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Process -->
+    <section id="process" class="process">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-head__num">02 / How we work</div>
+          <h2 class="section-head__title">From whiteboard to production in four steps.</h2>
+        </div>
+
+        <div class="process__grid">
+          <div class="process__step">
+            <div class="process__step-num">01</div>
+            <h3 class="process__step-title">Diagnose</h3>
+            <p class="process__step-desc">Two weeks, one senior team. We map the workflows, systems, and data we'd need to touch — and what we'd build first.</p>
+          </div>
+          <div class="process__step">
+            <div class="process__step-num">02</div>
+            <h3 class="process__step-title">Design</h3>
+            <p class="process__step-desc">A small squad (designer, engineer, researcher) prototypes the system against your real data. You see working software in week three.</p>
+          </div>
+          <div class="process__step">
+            <div class="process__step-num">03</div>
+            <h3 class="process__step-title">Deploy</h3>
+            <p class="process__step-desc">We ship to your environment — cloud, VPC, or on-prem — with observability, eval harnesses, and rollback wired in from day one.</p>
+          </div>
+          <div class="process__step">
+            <div class="process__step-num">04</div>
+            <h3 class="process__step-title">Scale</h3>
+            <p class="process__step-desc">Our platform team keeps watch, tunes evals, and ships improvements. You focus on the business; the system gets sharper every week.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About / Big statement -->
+    <section id="about" class="about">
+      <div class="container">
+        <div class="about__quote">
+          <p class="about__quote-text">
+            We started Eventech in 2017 with a single belief: that the next decade of software would be written by machines, in collaboration with the people who know your business best.
+          </p>
+          <div class="about__quote-attr">
+            <div class="about__quote-name">Ava Marchetti</div>
+            <div class="about__quote-role">Co-founder & CEO</div>
+          </div>
+        </div>
+
+        <div class="about__pillars">
+          <div class="about__pillar">
+            <div class="about__pillar-num">/01</div>
+            <h4>Engineered, not assembled</h4>
+            <p>Every system we ship is owned end-to-end by a single team. No outsourced handoffs, no integration debt.</p>
+          </div>
+          <div class="about__pillar">
+            <div class="about__pillar-num">/02</div>
+            <h4>Production on day one</h4>
+            <p>We measure ourselves on systems that handle real load on real customers — not on slides or pilots.</p>
+          </div>
+          <div class="about__pillar">
+            <div class="about__pillar-num">/03</div>
+            <h4>Built to be audited</h4>
+            <p>Every model call, retrieval, and tool invocation is logged. You can explain every decision your AI makes.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="contact" class="cta">
+      <div class="container">
+        <div class="cta__inner">
+          <h2 class="cta__title">
+            <span class="line">Tell us what</span>
+            <span class="line">you want to <em>build</em>.</span>
+          </h2>
+          <p class="cta__sub">A senior partner will reply within one business day. NDA-friendly. Fixed-scope or retained — your call.</p>
+          <form class="cta__form" onsubmit="event.preventDefault(); document.getElementById('cta-sent').hidden = false; this.reset();">
+            <div class="cta__form-row">
+              <label>
+                <span>Your name</span>
+                <input type="text" required placeholder="Jane Park" />
+              </label>
+              <label>
+                <span>Work email</span>
+                <input type="email" required placeholder="jane@company.com" />
+              </label>
+            </div>
+            <div class="cta__form-row">
+              <label class="cta__form-full">
+                <span>What are you building?</span>
+                <textarea rows="3" required placeholder="A 2-3 sentence brief. We'll take it from there."></textarea>
+              </label>
+            </div>
+            <div class="cta__form-actions">
+              <button type="submit" class="btn btn--primary">
+                <span>Send brief</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+              </button>
+              <p id="cta-sent" class="cta__form-sent" hidden>Thanks — we'll be in touch within 24 hours.</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <a href="#top" class="nav__logo">
+            <span class="nav__logo-mark">◐</span>
+            <span class="nav__logo-text">Eventech</span>
+          </a>
+          <p>Intelligence, engineered.</p>
+        </div>
+        <div class="footer__col">
+          <div class="footer__col-title">Services</div>
+          <a href="#services">AI Automation</a>
+          <a href="#services">AI Websites & Apps</a>
+          <a href="#services">Custom AI Solutions</a>
+        </div>
+        <div class="footer__col">
+          <div class="footer__col-title">Company</div>
+          <a href="#about">About</a>
+          <a href="#process">Process</a>
+          <a href="#contact">Contact</a>
+        </div>
+        <div class="footer__col">
+          <div class="footer__col-title">Offices</div>
+          <p>San Francisco, CA</p>
+          <p>Palo Alto, CA</p>
+          <p>New York, NY</p>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p>© 2026 Eventech, Inc. — All rights reserved.</p>
+        <p>Made in California.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="./script.js" defer></script>
+</body>
+</html>
