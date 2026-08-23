@@ -31,60 +31,94 @@
     renderer.setClearColor(0x000000, 0);
 
     const ink = 0x0a0a0a;
+    const coral = 0xff5b4a;
 
-    // ---- Central wireframe group (nested icosahedrons + a ring)
+    // ---- Central focal group: wireframe sphere (hero) + nested icosahedrons + 2 rings
     const group = new THREE.Group();
     scene.add(group);
 
+    // Wireframe sphere (the hero element) — sparse, low opacity
+    const sphere = new THREE.Mesh(
+      new THREE.SphereGeometry(1.7, 24, 16),
+      new THREE.MeshBasicMaterial({ color: ink, wireframe: true, transparent: true, opacity: 0.08 })
+    );
+    group.add(sphere);
+
+    // Filled sphere with very low opacity, so the wireframe reads as a shell
+    const sphereCore = new THREE.Mesh(
+      new THREE.SphereGeometry(1.55, 32, 24),
+      new THREE.MeshBasicMaterial({ color: ink, transparent: true, opacity: 0.025, side: THREE.BackSide })
+    );
+    group.add(sphereCore);
+
     const icoOuter = new THREE.Mesh(
-      new THREE.IcosahedronGeometry(1.8, 1),
+      new THREE.IcosahedronGeometry(2.0, 1),
       new THREE.MeshBasicMaterial({ color: ink, wireframe: true, transparent: true, opacity: 0.05 })
     );
     group.add(icoOuter);
 
     const icoInner = new THREE.Mesh(
-      new THREE.IcosahedronGeometry(0.9, 0),
-      new THREE.MeshBasicMaterial({ color: ink, wireframe: true, transparent: true, opacity: 0.09 })
+      new THREE.IcosahedronGeometry(1.0, 0),
+      new THREE.MeshBasicMaterial({ color: ink, wireframe: true, transparent: true, opacity: 0.10 })
     );
     group.add(icoInner);
 
+    // One coral accent: a small ring at a tilted angle
+    const coralRing = new THREE.Mesh(
+      new THREE.TorusGeometry(2.5, 0.005, 8, 120),
+      new THREE.MeshBasicMaterial({ color: coral, transparent: true, opacity: 0.4 })
+    );
+    coralRing.rotation.x = Math.PI / 2.2;
+    coralRing.rotation.z = Math.PI / 5;
+    group.add(coralRing);
+
     const ring = new THREE.Mesh(
-      new THREE.TorusGeometry(2.9, 0.004, 6, 120),
+      new THREE.TorusGeometry(3.1, 0.004, 6, 140),
       new THREE.MeshBasicMaterial({ color: ink, transparent: true, opacity: 0.13 })
     );
     ring.rotation.x = Math.PI / 2.4;
     group.add(ring);
 
     const ring2 = new THREE.Mesh(
-      new THREE.TorusGeometry(3.6, 0.003, 6, 120),
+      new THREE.TorusGeometry(3.7, 0.003, 6, 140),
       new THREE.MeshBasicMaterial({ color: ink, transparent: true, opacity: 0.07 })
     );
     ring2.rotation.x = Math.PI / 1.6;
     ring2.rotation.z = Math.PI / 4;
     group.add(ring2);
 
-    // ---- Particle field (sphere distribution, 200–400 points)
-    const particleCount = isLowPower ? 120 : 260;
+    // ---- Particle field (sphere distribution, 200–400 points) with a sprinkle of coral
+    const particleCount = isLowPower ? 140 : 320;
     const positions = new Float32Array(particleCount * 3);
-    const speeds = new Float32Array(particleCount);
+    const particleColors = new Float32Array(particleCount * 3);
     for (let i = 0; i < particleCount; i++) {
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
-      const r = 2.2 + Math.random() * 4.5;
+      const r = 2.4 + Math.random() * 4.5;
       positions[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
       positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
       positions[i * 3 + 2] = r * Math.cos(phi);
-      speeds[i] = 0.4 + Math.random() * 0.6; // orbit speed multiplier
+      // ~8% of particles are coral as accent points
+      if (Math.random() < 0.08) {
+        particleColors[i * 3]     = 1.0;
+        particleColors[i * 3 + 1] = 0.357;
+        particleColors[i * 3 + 2] = 0.290;
+      } else {
+        particleColors[i * 3]     = 0.039;
+        particleColors[i * 3 + 1] = 0.039;
+        particleColors[i * 3 + 2] = 0.039;
+      }
     }
     const particleGeo = new THREE.BufferGeometry();
     particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    particleGeo.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
     const particles = new THREE.Points(
       particleGeo,
       new THREE.PointsMaterial({
-        color: ink,
-        size: 0.022,
+        size: 0.025,
+        vertexColors: true,
         transparent: true,
-        opacity: 0.4,
+        opacity: 0.5,
         sizeAttenuation: true
       })
     );
@@ -149,18 +183,22 @@
       mouse.x += (mouse.tx - mouse.x) * 0.05;
       mouse.y += (mouse.ty - mouse.y) * 0.05;
 
-      // Rotate the central group — icosahedrons spin in opposite directions
+      // Rotate the central group — sphere + icosahedrons + rings, all drifting
+      sphere.rotation.y = t * 0.05;
+      sphere.rotation.x = t * 0.025;
       icoOuter.rotation.x = t * 0.04;
       icoOuter.rotation.y = t * 0.06;
       icoInner.rotation.x = -t * 0.09;
       icoInner.rotation.y = -t * 0.07;
+      coralRing.rotation.y = t * 0.22;
+      coralRing.rotation.z = Math.PI / 5 + t * 0.05;
       ring.rotation.z = t * 0.12;
       ring2.rotation.z = -t * 0.09;
       ring2.rotation.y = t * 0.04;
 
       // Subtle mouse parallax on the central group
-      group.position.x = mouse.x * 0.18;
-      group.position.y = mouse.y * 0.18;
+      group.position.x = mouse.x * 0.22;
+      group.position.y = mouse.y * 0.22;
 
       // Particle field orbits + mouse influence
       particles.rotation.y = t * 0.025 + mouse.x * 0.15;
