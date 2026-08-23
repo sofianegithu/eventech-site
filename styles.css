@@ -997,6 +997,16 @@ input, textarea {
   color: var(--muted);
 }
 
+.cta__email {
+  color: var(--ink);
+  border-bottom: 1px solid var(--hair-strong);
+  transition: border-color var(--t-fast) var(--ease);
+}
+
+.cta__email:hover {
+  border-bottom-color: var(--ink);
+}
+
 .cta__form {
   max-width: 720px;
   margin: 0 auto;
@@ -1058,6 +1068,21 @@ input, textarea {
   font-size: 14px;
   color: var(--ink);
   font-family: 'JetBrains Mono', monospace;
+}
+
+.cta__form-error {
+  font-size: 14px;
+  color: var(--ink);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.cta__form-error a {
+  border-bottom: 1px solid var(--hair-strong);
+}
+
+.cta__form button:disabled {
+  opacity: 0.6;
+  cursor: wait;
 }
 
 @media (max-width: 640px) {

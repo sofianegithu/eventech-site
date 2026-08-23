@@ -91,4 +91,50 @@
       }
     });
   });
+
+  // ---- Contact form (FormSubmit AJAX, no signup, no key in client)
+  const form = document.getElementById('contact-form');
+  if (form) {
+    const sent = document.getElementById('cta-sent');
+    const errorEl = document.getElementById('cta-error');
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalBtn = submitBtn ? submitBtn.innerHTML : '';
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (sent) sent.hidden = true;
+      if (errorEl) errorEl.hidden = true;
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>Sending…</span>';
+      }
+      try {
+        const data = new FormData(form);
+        // Honeypot: if filled, silently succeed without sending
+        if (data.get('_honey')) {
+          if (sent) sent.hidden = false;
+          form.reset();
+          return;
+        }
+        const r = await fetch('https://formsubmit.co/ajax/help@eventech.cloud', {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+        if (r.ok) {
+          if (sent) sent.hidden = false;
+          form.reset();
+        } else {
+          throw new Error('non-2xx');
+        }
+      } catch (err) {
+        if (errorEl) errorEl.hidden = false;
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtn;
+        }
+      }
+    });
+  }
 })();
