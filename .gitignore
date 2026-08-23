@@ -17,6 +17,10 @@ build/
 .next/
 *.tsbuildinfo
 
+# Temp / dev
+.commitmsg
+*.local
+
 # Env / secrets
 .env
 .env.local
