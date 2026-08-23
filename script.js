@@ -38,26 +38,26 @@
 
     const icoOuter = new THREE.Mesh(
       new THREE.IcosahedronGeometry(1.8, 1),
-      new THREE.MeshBasicMaterial({ color: ink, wireframe: true, transparent: true, opacity: 0.07 })
+      new THREE.MeshBasicMaterial({ color: ink, wireframe: true, transparent: true, opacity: 0.05 })
     );
     group.add(icoOuter);
 
     const icoInner = new THREE.Mesh(
       new THREE.IcosahedronGeometry(0.9, 0),
-      new THREE.MeshBasicMaterial({ color: ink, wireframe: true, transparent: true, opacity: 0.12 })
+      new THREE.MeshBasicMaterial({ color: ink, wireframe: true, transparent: true, opacity: 0.09 })
     );
     group.add(icoInner);
 
     const ring = new THREE.Mesh(
       new THREE.TorusGeometry(2.9, 0.004, 6, 120),
-      new THREE.MeshBasicMaterial({ color: ink, transparent: true, opacity: 0.18 })
+      new THREE.MeshBasicMaterial({ color: ink, transparent: true, opacity: 0.13 })
     );
     ring.rotation.x = Math.PI / 2.4;
     group.add(ring);
 
     const ring2 = new THREE.Mesh(
       new THREE.TorusGeometry(3.6, 0.003, 6, 120),
-      new THREE.MeshBasicMaterial({ color: ink, transparent: true, opacity: 0.10 })
+      new THREE.MeshBasicMaterial({ color: ink, transparent: true, opacity: 0.07 })
     );
     ring2.rotation.x = Math.PI / 1.6;
     ring2.rotation.z = Math.PI / 4;
@@ -82,9 +82,9 @@
       particleGeo,
       new THREE.PointsMaterial({
         color: ink,
-        size: 0.025,
+        size: 0.022,
         transparent: true,
-        opacity: 0.55,
+        opacity: 0.4,
         sizeAttenuation: true
       })
     );
@@ -109,7 +109,7 @@
     }
     const lines = new THREE.LineSegments(
       new THREE.BufferGeometry().setAttribute('position', new THREE.Float32BufferAttribute(lineVerts, 3)),
-      new THREE.LineBasicMaterial({ color: ink, transparent: true, opacity: 0.07 })
+      new THREE.LineBasicMaterial({ color: ink, transparent: true, opacity: 0.05 })
     );
     scene.add(lines);
 
@@ -150,21 +150,21 @@
       mouse.y += (mouse.ty - mouse.y) * 0.05;
 
       // Rotate the central group — icosahedrons spin in opposite directions
-      icoOuter.rotation.x = t * 0.06;
-      icoOuter.rotation.y = t * 0.09;
-      icoInner.rotation.x = -t * 0.14;
-      icoInner.rotation.y = -t * 0.11;
-      ring.rotation.z = t * 0.18;
-      ring2.rotation.z = -t * 0.13;
-      ring2.rotation.y = t * 0.05;
+      icoOuter.rotation.x = t * 0.04;
+      icoOuter.rotation.y = t * 0.06;
+      icoInner.rotation.x = -t * 0.09;
+      icoInner.rotation.y = -t * 0.07;
+      ring.rotation.z = t * 0.12;
+      ring2.rotation.z = -t * 0.09;
+      ring2.rotation.y = t * 0.04;
 
       // Subtle mouse parallax on the central group
-      group.position.x = mouse.x * 0.25;
-      group.position.y = mouse.y * 0.25;
+      group.position.x = mouse.x * 0.18;
+      group.position.y = mouse.y * 0.18;
 
       // Particle field orbits + mouse influence
-      particles.rotation.y = t * 0.04 + mouse.x * 0.2;
-      particles.rotation.x = t * 0.02 + mouse.y * 0.15;
+      particles.rotation.y = t * 0.025 + mouse.x * 0.15;
+      particles.rotation.x = t * 0.015 + mouse.y * 0.1;
       lines.rotation.copy(particles.rotation);
 
       renderer.render(scene, camera);
