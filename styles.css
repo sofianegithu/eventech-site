@@ -175,8 +175,8 @@ input, textarea {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 13px;
+  width: 96px;
+  height: 32px;
   color: var(--ink);
   flex-shrink: 0;
 }
@@ -1110,6 +1110,8 @@ input, textarea {
 
 .footer__brand .nav__logo-mark {
   color: var(--bg);
+  width: 128px;
+  height: 42px;
 }
 
 .footer__col {
