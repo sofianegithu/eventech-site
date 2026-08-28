@@ -29,10 +29,10 @@
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setClearColor(0x000000, 0);
 
-    // ---- Grid definition
-    const cols = isLowPower ? 14 : 20;
-    const rows = isLowPower ? 7  : 10;
-    const spacing = 0.36;
+    // ---- Grid definition (sparse + quiet: the scene is a texture, not a feature)
+    const cols = isLowPower ? 12 : 16;
+    const rows = isLowPower ? 6  : 8;
+    const spacing = 0.42;
     const particleCount = cols * rows;
 
     const positions  = new Float32Array(particleCount * 3);
@@ -42,11 +42,11 @@
     const phases     = new Float32Array(particleCount);
     const colors     = new Float32Array(particleCount * 3);
 
-    // Hand-picked coral "lit" points — placed for visual balance, not random
+    // Hand-picked coral "lit" points — placed for visual balance, not random.
+    // Kept to 4 to stay as a quiet accent, not a feature.
     const coralIndexSet = new Set();
     const coralLayout = [
-      [3, 2],  [11, 3],  [16, 5],  [7, 7],
-      [13, 1], [4, 8],   [9, 4]
+      [3, 2],  [11, 3],  [7, 5],  [4, 6]
     ];
     coralLayout.forEach(([c, r]) => {
       if (c < cols && r < rows) coralIndexSet.add(r * cols + c);
@@ -70,9 +70,9 @@
         positions[i * 3 + 1] = basePos[i * 3 + 1];
         positions[i * 3 + 2] = 0;
 
-        // Size: most are 1.0, a few are bigger, coral ones are the biggest
+        // Size: small, uniform; coral ones are just a touch larger, never loud
         const isCoral = coralIndexSet.has(i);
-        baseSizes[i] = isCoral ? 2.6 : (1.0 + Math.random() * 0.9);
+        baseSizes[i] = isCoral ? 1.2 : (0.45 + Math.random() * 0.35);
         sizes[i] = baseSizes[i];
 
         phases[i] = Math.random() * Math.PI * 2;
@@ -121,8 +121,8 @@
       blending: THREE.NormalBlending
     });
     const particles = new THREE.Points(particleGeo, particleMat);
-    // Initial 3D tilt for depth
-    particles.rotation.x = -0.18;
+    // Very subtle 3D tilt — just a hint of depth, not a hero feature
+    particles.rotation.x = -0.10;
     scene.add(particles);
 
     // ---- Mesh lines: connect each point to its right + bottom neighbor.
@@ -159,11 +159,11 @@
     const lineMat = new THREE.LineBasicMaterial({
       color: 0x0a0a0a,
       transparent: true,
-      opacity: 0.14,
+      opacity: 0.04,
       depthWrite: false
     });
     const lines = new THREE.LineSegments(lineGeo, lineMat);
-    lines.rotation.x = -0.18;
+    lines.rotation.x = -0.10;
     scene.add(lines);
 
     // ---- Mouse parallax
@@ -200,28 +200,28 @@
       mouse.x += (mouse.tx - mouse.x) * 0.05;
       mouse.y += (mouse.ty - mouse.y) * 0.05;
 
-      // ---- 1) Data wave through the grid.
-      // Two interfering sine waves create an organic rolling pattern.
+      // ---- 1) Quiet data wave through the grid.
+      // Two interfering sine waves, low amplitude — barely a shimmer.
       for (let i = 0; i < particleCount; i++) {
         const base = i * 3;
         const x = basePos[base];
         const y = basePos[base + 1];
 
-        // Primary traveling wave
-        const wave1 = Math.sin(x * 0.55 - t * 0.95) * 0.30;
-        // Secondary wave at an angle, slower
-        const wave2 = Math.cos((x * 0.30 + y * 0.40) + t * 0.55) * 0.18;
+        // Primary traveling wave (low amplitude)
+        const wave1 = Math.sin(x * 0.55 - t * 0.95) * 0.12;
+        // Secondary wave at an angle, slower, even smaller
+        const wave2 = Math.cos((x * 0.30 + y * 0.40) + t * 0.55) * 0.07;
         // Tiny per-point breathing
-        const breath = Math.sin(t * 0.6 + phases[i]) * 0.04;
+        const breath = Math.sin(t * 0.6 + phases[i]) * 0.02;
 
         positions[base + 2] = wave1 + wave2 + breath;
       }
       particleGeo.attributes.position.needsUpdate = true;
 
-      // ---- 2) Coral points pulse subtly to read as "active data"
+      // ---- 2) Coral points breathe very gently — read as "lit", not "pulsing"
       for (let k = 0; k < coralIndices.length; k++) {
         const i = coralIndices[k];
-        const pulse = 2.4 + Math.sin(t * 1.6 + i * 0.7) * 0.6;
+        const pulse = 1.1 + Math.sin(t * 1.4 + i * 0.7) * 0.25;
         sizes[i] = pulse;
       }
       particleGeo.attributes.size.needsUpdate = true;
@@ -239,12 +239,12 @@
       }
       lineGeo.attributes.position.needsUpdate = true;
 
-      // ---- 4) Subtle global line opacity breathing
-      lineMat.opacity = 0.11 + Math.sin(t * 0.4) * 0.03;
+      // ---- 4) Subtle global line opacity breathing (stays whisper-quiet)
+      lineMat.opacity = 0.035 + Math.sin(t * 0.4) * 0.012;
 
-      // ---- 5) Light mouse parallax on top of the static tilt
-      particles.rotation.y = mouse.x * 0.12;
-      particles.rotation.x = -0.18 - mouse.y * 0.06;
+      // ---- 5) Almost imperceptible mouse parallax on top of the static tilt
+      particles.rotation.y = mouse.x * 0.04;
+      particles.rotation.x = -0.10 - mouse.y * 0.02;
       lines.rotation.y = particles.rotation.y;
       lines.rotation.x = particles.rotation.x;
 

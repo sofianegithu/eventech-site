@@ -299,8 +299,8 @@ input, textarea {
 
 .hero__title {
   margin-top: 32px;
-  font-size: clamp(64px, 11vw, 168px);
-  line-height: 0.92;
+  font-size: clamp(56px, 9.5vw, 144px);
+  line-height: 0.94;
   letter-spacing: -0.05em;
   font-weight: 700;
   color: var(--ink);
