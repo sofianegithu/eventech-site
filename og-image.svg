@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect width="1200" height="630" fill="#0a0a0a"/>
+  <!-- Logo mark (large, white) -->
+  <g transform="translate(80, 200) scale(0.6)" fill="#ffffff">
+    <path d="M387.48,480.88l-123.69-.54-100.25-.41,69.67-69.6c8.84-8.83,17.35-16.35,27.19-24.05,17.96-13.32,38.56-21.29,61.83-21.22l234.24.7-61.66,64.97c-12.58,13.25-26.04,24.08-41.65,33.42-20.18,11.11-41.74,16.83-65.69,16.72Z"/>
+    <path d="M479.41,324.16l-148.55-.81-67.04-.31,63.82-67.28c9.41-9.92,19.76-17.71,31.06-24.96,21.2-13.19,44.33-18.68,69.43-18.66l201.26.19-70.88,74.01c-12.47,12.03-24.94,22.28-40.44,29.79-12.17,5.08-24.43,8.1-38.66,8.03Z"/>
+  </g>
+  <!-- Wordmark -->
+  <text x="80" y="470" font-family="Inter, -apple-system, system-ui, sans-serif" font-size="92" font-weight="700" fill="#ffffff" letter-spacing="-3">eventech</text>
+  <!-- Headline -->
+  <text x="80" y="540" font-family="Inter, -apple-system, system-ui, sans-serif" font-size="32" font-weight="500" fill="#a0a0a0" letter-spacing="-0.5">AI that actually ships.</text>
+  <!-- Corner accent -->
+  <rect x="1080" y="80" width="40" height="40" fill="#ff5b4a"/>
+  <text x="80" y="585" font-family="JetBrains Mono, monospace" font-size="18" fill="#666666" letter-spacing="2">AI &amp; AUTOMATION STUDIO  ·  SAN FRANCISCO</text>
+</svg>

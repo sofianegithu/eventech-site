@@ -1,0 +1,13 @@
+# eventech.cloud — robots.txt
+# https://eventech.cloud
+
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://eventech.cloud/sitemap.xml
+
+# LLM-readable site summary (for AI crawlers)
+# See https://llmstxt.org for spec
+Allow: /llms.txt

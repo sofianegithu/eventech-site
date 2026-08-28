@@ -1210,6 +1210,101 @@ input, textarea {
 }
 
 /* =========================================================
+   FAQ
+   ========================================================= */
+.faq {
+  padding: 180px 0;
+  border-top: 1px solid var(--hair);
+}
+
+.faq__list {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--hair);
+}
+
+.faq__item {
+  border-bottom: 1px solid var(--hair);
+  padding: 0;
+}
+
+.faq__item summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 28px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  font-size: 19px;
+  line-height: 1.4;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.015em;
+  transition: color var(--t-fast) var(--ease);
+  position: relative;
+}
+
+.faq__item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq__item summary::marker {
+  content: '';
+}
+
+.faq__item summary::after {
+  content: '+';
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 22px;
+  font-weight: 300;
+  color: var(--muted);
+  flex-shrink: 0;
+  transition: transform var(--t-base) var(--ease), color var(--t-fast) var(--ease);
+  width: 16px;
+  text-align: center;
+}
+
+.faq__item[open] summary::after {
+  transform: rotate(45deg);
+  color: var(--ink);
+}
+
+.faq__item summary:hover {
+  color: var(--ink);
+}
+
+.faq__answer {
+  padding: 0 48px 28px 0;
+  max-width: 720px;
+}
+
+.faq__answer p {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
+
+.faq__answer a {
+  color: var(--ink);
+  border-bottom: 1px solid var(--hair-strong);
+  transition: border-color var(--t-fast) var(--ease);
+}
+
+.faq__answer a:hover {
+  border-bottom-color: var(--ink);
+}
+
+@media (max-width: 768px) {
+  .faq { padding: 120px 0; }
+  .faq__item summary { font-size: 17px; padding: 22px 0; }
+  .faq__answer { padding-right: 0; }
+}
+
+/* =========================================================
    Page hero (used on /terms, /refund, /about)
    ========================================================= */
 .page-hero {

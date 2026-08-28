@@ -3,14 +3,14 @@
 (function () {
   'use strict';
 
-  // ---- Three.js hero scene (WebGL particle + wireframe field)
+  // ---- Three.js hero scene: a quiet, breathing cloud of particles.
+  // One idea, done well — no wireframes, no rings, no icosahedrons.
   function setupHeroScene() {
     if (!window.THREE) return;
     const canvas = document.getElementById('hero-canvas');
     if (!canvas) return;
 
-    const isMobile = window.innerWidth < 768;
-    const isLowPower = isMobile;
+    const isLowPower = window.innerWidth < 768;
 
     // Scene + camera + renderer
     const scene = new THREE.Scene();
@@ -23,131 +23,104 @@
     try {
       renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: !isLowPower });
     } catch (e) {
-      // WebGL not available — gracefully degrade, CSS particles still show
-      return;
+      return; // graceful degrade — no scene, but the page still works
     }
     renderer.setSize(w, h);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setClearColor(0x000000, 0);
 
-    const ink = 0x0a0a0a;
-    const coral = 0xff5b4a;
+    // ---- Particle field: variable sizes, drift motion, coral accent on ~3%
+    const particleCount = isLowPower ? 180 : 420;
+    const positions  = new Float32Array(particleCount * 3);
+    const basePos    = new Float32Array(particleCount * 3);
+    const sizes      = new Float32Array(particleCount);
+    const baseSizes  = new Float32Array(particleCount);
+    const phases     = new Float32Array(particleCount);
+    const colors     = new Float32Array(particleCount * 3);
 
-    // ---- Central focal group: wireframe sphere (hero) + nested icosahedrons + 2 rings
-    const group = new THREE.Group();
-    scene.add(group);
-
-    // Wireframe sphere (the hero element) — sparse, low opacity
-    const sphere = new THREE.Mesh(
-      new THREE.SphereGeometry(1.7, 24, 16),
-      new THREE.MeshBasicMaterial({ color: ink, wireframe: true, transparent: true, opacity: 0.08 })
-    );
-    group.add(sphere);
-
-    // Filled sphere with very low opacity, so the wireframe reads as a shell
-    const sphereCore = new THREE.Mesh(
-      new THREE.SphereGeometry(1.55, 32, 24),
-      new THREE.MeshBasicMaterial({ color: ink, transparent: true, opacity: 0.025, side: THREE.BackSide })
-    );
-    group.add(sphereCore);
-
-    const icoOuter = new THREE.Mesh(
-      new THREE.IcosahedronGeometry(2.0, 1),
-      new THREE.MeshBasicMaterial({ color: ink, wireframe: true, transparent: true, opacity: 0.05 })
-    );
-    group.add(icoOuter);
-
-    const icoInner = new THREE.Mesh(
-      new THREE.IcosahedronGeometry(1.0, 0),
-      new THREE.MeshBasicMaterial({ color: ink, wireframe: true, transparent: true, opacity: 0.10 })
-    );
-    group.add(icoInner);
-
-    // One coral accent: a small ring at a tilted angle
-    const coralRing = new THREE.Mesh(
-      new THREE.TorusGeometry(2.5, 0.005, 8, 120),
-      new THREE.MeshBasicMaterial({ color: coral, transparent: true, opacity: 0.4 })
-    );
-    coralRing.rotation.x = Math.PI / 2.2;
-    coralRing.rotation.z = Math.PI / 5;
-    group.add(coralRing);
-
-    const ring = new THREE.Mesh(
-      new THREE.TorusGeometry(3.1, 0.004, 6, 140),
-      new THREE.MeshBasicMaterial({ color: ink, transparent: true, opacity: 0.13 })
-    );
-    ring.rotation.x = Math.PI / 2.4;
-    group.add(ring);
-
-    const ring2 = new THREE.Mesh(
-      new THREE.TorusGeometry(3.7, 0.003, 6, 140),
-      new THREE.MeshBasicMaterial({ color: ink, transparent: true, opacity: 0.07 })
-    );
-    ring2.rotation.x = Math.PI / 1.6;
-    ring2.rotation.z = Math.PI / 4;
-    group.add(ring2);
-
-    // ---- Particle field (sphere distribution, 200–400 points) with a sprinkle of coral
-    const particleCount = isLowPower ? 140 : 320;
-    const positions = new Float32Array(particleCount * 3);
-    const particleColors = new Float32Array(particleCount * 3);
     for (let i = 0; i < particleCount; i++) {
+      // Distribute in a flattened sphere (more horizontal than vertical — feels like a cloud, not a bubble)
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
-      const r = 2.4 + Math.random() * 4.5;
-      positions[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
-      positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-      positions[i * 3 + 2] = r * Math.cos(phi);
-      // ~8% of particles are coral as accent points
-      if (Math.random() < 0.08) {
-        particleColors[i * 3]     = 1.0;
-        particleColors[i * 3 + 1] = 0.357;
-        particleColors[i * 3 + 2] = 0.290;
+      const r = 2.4 + Math.random() * 4.8;
+      basePos[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
+      basePos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta) * 0.65;
+      basePos[i * 3 + 2] = r * Math.cos(phi) * 0.7;
+      positions[i * 3]     = basePos[i * 3];
+      positions[i * 3 + 1] = basePos[i * 3 + 1];
+      positions[i * 3 + 2] = basePos[i * 3 + 2];
+
+      // Per-particle base size: 0.6 → 2.4 (so a few are visibly larger, most are tiny)
+      const s = 0.6 + Math.pow(Math.random(), 1.7) * 1.8;
+      baseSizes[i] = s;
+      sizes[i] = s;
+
+      // Per-particle phase for drift
+      phases[i] = Math.random() * Math.PI * 2;
+
+      // ~3% of particles are coral — a single warm glint somewhere in the cloud
+      if (Math.random() < 0.03) {
+        colors[i * 3]     = 1.0;
+        colors[i * 3 + 1] = 0.357;
+        colors[i * 3 + 2] = 0.290;
       } else {
-        particleColors[i * 3]     = 0.039;
-        particleColors[i * 3 + 1] = 0.039;
-        particleColors[i * 3 + 2] = 0.039;
+        colors[i * 3]     = 0.039;
+        colors[i * 3 + 1] = 0.039;
+        colors[i * 3 + 2] = 0.039;
       }
     }
+
     const particleGeo = new THREE.BufferGeometry();
     particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    particleGeo.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
-    const particles = new THREE.Points(
-      particleGeo,
-      new THREE.PointsMaterial({
-        size: 0.025,
-        vertexColors: true,
-        transparent: true,
-        opacity: 0.5,
-        sizeAttenuation: true
-      })
-    );
+    particleGeo.setAttribute('color',    new THREE.BufferAttribute(colors, 3));
+    particleGeo.setAttribute('size',      new THREE.BufferAttribute(sizes, 1));
+
+    // Custom shader: per-particle size + soft round point (no square pixels)
+    const particleMat = new THREE.ShaderMaterial({
+      vertexShader: `
+        attribute float size;
+        varying vec3 vColor;
+        void main() {
+          vColor = color;
+          vec4 mv = modelViewMatrix * vec4(position, 1.0);
+          gl_PointSize = size * (320.0 / max(-mv.z, 0.1));
+          gl_Position = projectionMatrix * mv;
+        }
+      `,
+      fragmentShader: `
+        varying vec3 vColor;
+        void main() {
+          vec2 c = gl_PointCoord - vec2(0.5);
+          float d = length(c);
+          if (d > 0.5) discard;
+          float a = pow(1.0 - d * 2.0, 1.6) * 0.55;
+          gl_FragColor = vec4(vColor, a);
+        }
+      `,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.NormalBlending
+    });
+    const particles = new THREE.Points(particleGeo, particleMat);
     scene.add(particles);
 
-    // ---- Connection lines (only between particles that are within distance)
-    const lineVerts = [];
-    const maxDist = isLowPower ? 0.7 : 0.85;
-    for (let i = 0; i < particleCount; i++) {
-      for (let j = i + 1; j < particleCount; j++) {
-        const dx = positions[i * 3]     - positions[j * 3];
-        const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
-        const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
-        const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-        if (dist < maxDist) {
-          lineVerts.push(
-            positions[i * 3],     positions[i * 3 + 1], positions[i * 3 + 2],
-            positions[j * 3],     positions[j * 3 + 1], positions[j * 3 + 2]
-          );
-        }
-      }
-    }
-    const lines = new THREE.LineSegments(
-      new THREE.BufferGeometry().setAttribute('position', new THREE.Float32BufferAttribute(lineVerts, 3)),
-      new THREE.LineBasicMaterial({ color: ink, transparent: true, opacity: 0.05 })
-    );
+    // ---- Breathing connection lines: rebuilt every frame from current particle positions.
+    // Capped at a max number of lines to keep the cost predictable.
+    const maxLines = isLowPower ? 400 : 1200;
+    const lineGeo = new THREE.BufferGeometry();
+    const lineArr = new Float32Array(maxLines * 2 * 3);
+    lineGeo.setAttribute('position', new THREE.BufferAttribute(lineArr, 3));
+    lineGeo.setDrawRange(0, 0);
+    const lineMat = new THREE.LineBasicMaterial({
+      color: 0x0a0a0a,
+      transparent: true,
+      opacity: 0.07,
+      depthWrite: false
+    });
+    const lines = new THREE.LineSegments(lineGeo, lineMat);
     scene.add(lines);
 
-    // ---- Mouse interaction (gentle parallax)
+    // ---- Mouse parallax (gentle, just enough to feel alive)
     const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
     const onMove = (e) => {
       mouse.tx = (e.clientX / window.innerWidth) * 2 - 1;
@@ -155,7 +128,7 @@
     };
     document.addEventListener('mousemove', onMove, { passive: true });
 
-    // ---- Visibility — pause when tab hidden to save CPU
+    // ---- Visibility — pause when tab hidden
     let isVisible = true;
     document.addEventListener('visibilitychange', () => {
       isVisible = !document.hidden;
@@ -163,47 +136,93 @@
 
     // ---- Resize
     const onResize = () => {
-      const w = canvas.clientWidth;
-      const h = canvas.clientHeight;
-      if (w === 0 || h === 0) return;
-      camera.aspect = w / h;
+      const cw = canvas.clientWidth;
+      const ch = canvas.clientHeight;
+      if (cw === 0 || ch === 0) return;
+      camera.aspect = cw / ch;
       camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
+      renderer.setSize(cw, ch);
     };
     window.addEventListener('resize', onResize);
 
     // ---- Animation loop
     const clock = new THREE.Clock();
+    const maxDist = isLowPower ? 0.75 : 0.85;
+    const maxDistSq = maxDist * maxDist;
+
+    function rebuildConnections() {
+      // O(n²) but cheap with the early break and the line cap
+      let lineIdx = 0;
+      for (let i = 0; i < particleCount; i++) {
+        const ix = positions[i * 3];
+        const iy = positions[i * 3 + 1];
+        const iz = positions[i * 3 + 2];
+        for (let j = i + 1; j < particleCount; j++) {
+          const dx = ix - positions[j * 3];
+          const dy = iy - positions[j * 3 + 1];
+          const dz = iz - positions[j * 3 + 2];
+          const d2 = dx * dx + dy * dy + dz * dz;
+          if (d2 < maxDistSq) {
+            const base = lineIdx * 6;
+            lineArr[base]     = ix;
+            lineArr[base + 1] = iy;
+            lineArr[base + 2] = iz;
+            lineArr[base + 3] = positions[j * 3];
+            lineArr[base + 4] = positions[j * 3 + 1];
+            lineArr[base + 5] = positions[j * 3 + 2];
+            lineIdx++;
+            if (lineIdx >= maxLines) break;
+          }
+        }
+        if (lineIdx >= maxLines) break;
+      }
+      lineGeo.setDrawRange(0, lineIdx * 2);
+      lineGeo.attributes.position.needsUpdate = true;
+    }
+
     function animate() {
       requestAnimationFrame(animate);
       if (!isVisible) return;
 
       const t = clock.getElapsedTime();
-      // Smooth mouse
       mouse.x += (mouse.tx - mouse.x) * 0.05;
       mouse.y += (mouse.ty - mouse.y) * 0.05;
 
-      // Rotate the central group — sphere + icosahedrons + rings, all drifting
-      sphere.rotation.y = t * 0.05;
-      sphere.rotation.x = t * 0.025;
-      icoOuter.rotation.x = t * 0.04;
-      icoOuter.rotation.y = t * 0.06;
-      icoInner.rotation.x = -t * 0.09;
-      icoInner.rotation.y = -t * 0.07;
-      coralRing.rotation.y = t * 0.22;
-      coralRing.rotation.z = Math.PI / 5 + t * 0.05;
-      ring.rotation.z = t * 0.12;
-      ring2.rotation.z = -t * 0.09;
-      ring2.rotation.y = t * 0.04;
+      // ---- 1) Drift each particle around its base position (slow, organic)
+      for (let i = 0; i < particleCount; i++) {
+        const phase = phases[i];
+        const base = i * 3;
+        positions[base]     = basePos[base]     + Math.sin(t * 0.30 + phase)        * 0.18;
+        positions[base + 1] = basePos[base + 1] + Math.cos(t * 0.22 + phase * 1.3)  * 0.18;
+        positions[base + 2] = basePos[base + 2] + Math.sin(t * 0.18 + phase * 0.7)  * 0.18;
+      }
+      particleGeo.attributes.position.needsUpdate = true;
 
-      // Subtle mouse parallax on the central group
-      group.position.x = mouse.x * 0.22;
-      group.position.y = mouse.y * 0.22;
+      // ---- 2) Pulse wave: every 12s, a wave expands outward from center.
+      // Particles at the wave front briefly get a size + alpha boost.
+      const cycleT = (t % 12) / 12;            // 0..1
+      const pulseR = cycleT * 7.5;             // expand to radius 7.5
+      const pulseFade = 1 - cycleT;            // overall fade as wave expands
+      for (let i = 0; i < particleCount; i++) {
+        const base = i * 3;
+        const dx = positions[base];
+        const dy = positions[base + 1];
+        const r = Math.sqrt(dx * dx + dy * dy);
+        // Distance from current wave front
+        const distFromFront = Math.abs(r - pulseR);
+        // Peak boost when very close to the front
+        const boost = Math.max(0, 1 - distFromFront * 1.4) * pulseFade;
+        sizes[i] = baseSizes[i] + boost * 1.4;
+      }
+      particleGeo.attributes.size.needsUpdate = true;
 
-      // Particle field orbits + mouse influence
+      // ---- 3) Whole-cloud rotation + mouse parallax
       particles.rotation.y = t * 0.025 + mouse.x * 0.15;
-      particles.rotation.x = t * 0.015 + mouse.y * 0.1;
+      particles.rotation.x = mouse.y * 0.10;
       lines.rotation.copy(particles.rotation);
+
+      // ---- 4) Rebuild breathing connections
+      rebuildConnections();
 
       renderer.render(scene, camera);
     }
