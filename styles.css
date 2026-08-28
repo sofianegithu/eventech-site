@@ -1152,6 +1152,22 @@ input, textarea {
   flex-wrap: wrap;
 }
 
+.footer__bottom-links {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.footer__bottom-links a {
+  color: rgba(255, 255, 255, 0.65);
+  transition: color var(--t-fast) var(--ease);
+}
+
+.footer__bottom-links a:hover {
+  color: var(--bg);
+}
+
 @media (max-width: 1024px) {
   .footer__top { grid-template-columns: 1fr 1fr; gap: 32px; }
 }
