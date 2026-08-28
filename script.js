@@ -3,8 +3,8 @@
 (function () {
   'use strict';
 
-  // ---- Three.js hero scene: a quiet, breathing cloud of particles.
-  // One idea, done well — no wireframes, no rings, no icosahedrons.
+  // ---- Three.js hero scene: a structured 3D grid with a data wave
+  // moving through it. Few points, deliberate structure, tech feel.
   function setupHeroScene() {
     if (!window.THREE) return;
     const canvas = document.getElementById('hero-canvas');
@@ -16,21 +16,25 @@
     const scene = new THREE.Scene();
     const w = canvas.clientWidth || window.innerWidth;
     const h = canvas.clientHeight || 600;
-    const camera = new THREE.PerspectiveCamera(55, w / h, 0.1, 100);
-    camera.position.set(0, 0, 8);
+    const camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 100);
+    camera.position.set(0, 0, 9);
 
     let renderer;
     try {
       renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: !isLowPower });
     } catch (e) {
-      return; // graceful degrade — no scene, but the page still works
+      return;
     }
     renderer.setSize(w, h);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setClearColor(0x000000, 0);
 
-    // ---- Particle field: variable sizes, drift motion, coral accent on ~3%
-    const particleCount = isLowPower ? 180 : 420;
+    // ---- Grid definition
+    const cols = isLowPower ? 14 : 20;
+    const rows = isLowPower ? 7  : 10;
+    const spacing = 0.36;
+    const particleCount = cols * rows;
+
     const positions  = new Float32Array(particleCount * 3);
     const basePos    = new Float32Array(particleCount * 3);
     const sizes      = new Float32Array(particleCount);
@@ -38,44 +42,59 @@
     const phases     = new Float32Array(particleCount);
     const colors     = new Float32Array(particleCount * 3);
 
-    for (let i = 0; i < particleCount; i++) {
-      // Distribute in a flattened sphere (more horizontal than vertical — feels like a cloud, not a bubble)
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.acos(2 * Math.random() - 1);
-      const r = 2.4 + Math.random() * 4.8;
-      basePos[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
-      basePos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta) * 0.65;
-      basePos[i * 3 + 2] = r * Math.cos(phi) * 0.7;
-      positions[i * 3]     = basePos[i * 3];
-      positions[i * 3 + 1] = basePos[i * 3 + 1];
-      positions[i * 3 + 2] = basePos[i * 3 + 2];
+    // Hand-picked coral "lit" points — placed for visual balance, not random
+    const coralIndexSet = new Set();
+    const coralLayout = [
+      [3, 2],  [11, 3],  [16, 5],  [7, 7],
+      [13, 1], [4, 8],   [9, 4]
+    ];
+    coralLayout.forEach(([c, r]) => {
+      if (c < cols && r < rows) coralIndexSet.add(r * cols + c);
+    });
+    const coralIndices = Array.from(coralIndexSet);
 
-      // Per-particle base size: 0.6 → 2.4 (so a few are visibly larger, most are tiny)
-      const s = 0.6 + Math.pow(Math.random(), 1.7) * 1.8;
-      baseSizes[i] = s;
-      sizes[i] = s;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const i = r * cols + c;
+        const x = (c - (cols - 1) / 2) * spacing;
+        const y = (r - (rows - 1) / 2) * spacing;
 
-      // Per-particle phase for drift
-      phases[i] = Math.random() * Math.PI * 2;
+        // Tiny per-point offset so the grid feels alive, not stenciled
+        const ox = (Math.random() - 0.5) * 0.05;
+        const oy = (Math.random() - 0.5) * 0.05;
 
-      // ~3% of particles are coral — a single warm glint somewhere in the cloud
-      if (Math.random() < 0.03) {
-        colors[i * 3]     = 1.0;
-        colors[i * 3 + 1] = 0.357;
-        colors[i * 3 + 2] = 0.290;
-      } else {
-        colors[i * 3]     = 0.039;
-        colors[i * 3 + 1] = 0.039;
-        colors[i * 3 + 2] = 0.039;
+        basePos[i * 3]     = x + ox;
+        basePos[i * 3 + 1] = y + oy;
+        basePos[i * 3 + 2] = 0;
+        positions[i * 3]     = basePos[i * 3];
+        positions[i * 3 + 1] = basePos[i * 3 + 1];
+        positions[i * 3 + 2] = 0;
+
+        // Size: most are 1.0, a few are bigger, coral ones are the biggest
+        const isCoral = coralIndexSet.has(i);
+        baseSizes[i] = isCoral ? 2.6 : (1.0 + Math.random() * 0.9);
+        sizes[i] = baseSizes[i];
+
+        phases[i] = Math.random() * Math.PI * 2;
+
+        if (isCoral) {
+          colors[i * 3]     = 1.0;
+          colors[i * 3 + 1] = 0.357;
+          colors[i * 3 + 2] = 0.290;
+        } else {
+          colors[i * 3]     = 0.039;
+          colors[i * 3 + 1] = 0.039;
+          colors[i * 3 + 2] = 0.039;
+        }
       }
     }
 
+    // ---- Particle material (custom shader for soft round points + per-particle size)
     const particleGeo = new THREE.BufferGeometry();
     particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     particleGeo.setAttribute('color',    new THREE.BufferAttribute(colors, 3));
     particleGeo.setAttribute('size',      new THREE.BufferAttribute(sizes, 1));
 
-    // Custom shader: per-particle size + soft round point (no square pixels)
     const particleMat = new THREE.ShaderMaterial({
       vertexShader: `
         attribute float size;
@@ -83,7 +102,7 @@
         void main() {
           vColor = color;
           vec4 mv = modelViewMatrix * vec4(position, 1.0);
-          gl_PointSize = size * (320.0 / max(-mv.z, 0.1));
+          gl_PointSize = size * (340.0 / max(-mv.z, 0.1));
           gl_Position = projectionMatrix * mv;
         }
       `,
@@ -93,7 +112,7 @@
           vec2 c = gl_PointCoord - vec2(0.5);
           float d = length(c);
           if (d > 0.5) discard;
-          float a = pow(1.0 - d * 2.0, 1.6) * 0.55;
+          float a = pow(1.0 - d * 2.0, 1.6) * 0.6;
           gl_FragColor = vec4(vColor, a);
         }
       `,
@@ -102,25 +121,52 @@
       blending: THREE.NormalBlending
     });
     const particles = new THREE.Points(particleGeo, particleMat);
+    // Initial 3D tilt for depth
+    particles.rotation.x = -0.18;
     scene.add(particles);
 
-    // ---- Breathing connection lines: rebuilt every frame from current particle positions.
-    // Capped at a max number of lines to keep the cost predictable.
-    const maxLines = isLowPower ? 400 : 1200;
+    // ---- Mesh lines: connect each point to its right + bottom neighbor.
+    // Rebuilt every frame because particles move with the wave.
+    const horizLineCount = (cols - 1) * rows;
+    const vertLineCount  = cols * (rows - 1);
+    const totalLineCount  = horizLineCount + vertLineCount;
+    const lineArr = new Float32Array(totalLineCount * 2 * 3);
+
+    // Build the connectivity map (which indices are connected) once
+    const lineConnections = [];
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const i = r * cols + c;
+        if (c < cols - 1) lineConnections.push([i, i + 1]);
+        if (r < rows - 1) lineConnections.push([i, (r + 1) * cols + c]);
+      }
+    }
+
+    // Initial fill (will be updated every frame)
+    for (let li = 0; li < lineConnections.length; li++) {
+      const [a, b] = lineConnections[li];
+      const base = li * 6;
+      lineArr[base]     = positions[a * 3];
+      lineArr[base + 1] = positions[a * 3 + 1];
+      lineArr[base + 2] = positions[a * 3 + 2];
+      lineArr[base + 3] = positions[b * 3];
+      lineArr[base + 4] = positions[b * 3 + 1];
+      lineArr[base + 5] = positions[b * 3 + 2];
+    }
+
     const lineGeo = new THREE.BufferGeometry();
-    const lineArr = new Float32Array(maxLines * 2 * 3);
     lineGeo.setAttribute('position', new THREE.BufferAttribute(lineArr, 3));
-    lineGeo.setDrawRange(0, 0);
     const lineMat = new THREE.LineBasicMaterial({
       color: 0x0a0a0a,
       transparent: true,
-      opacity: 0.07,
+      opacity: 0.14,
       depthWrite: false
     });
     const lines = new THREE.LineSegments(lineGeo, lineMat);
+    lines.rotation.x = -0.18;
     scene.add(lines);
 
-    // ---- Mouse parallax (gentle, just enough to feel alive)
+    // ---- Mouse parallax
     const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
     const onMove = (e) => {
       mouse.tx = (e.clientX / window.innerWidth) * 2 - 1;
@@ -128,13 +174,11 @@
     };
     document.addEventListener('mousemove', onMove, { passive: true });
 
-    // ---- Visibility — pause when tab hidden
+    // ---- Visibility + resize
     let isVisible = true;
     document.addEventListener('visibilitychange', () => {
       isVisible = !document.hidden;
     });
-
-    // ---- Resize
     const onResize = () => {
       const cw = canvas.clientWidth;
       const ch = canvas.clientHeight;
@@ -147,38 +191,6 @@
 
     // ---- Animation loop
     const clock = new THREE.Clock();
-    const maxDist = isLowPower ? 0.75 : 0.85;
-    const maxDistSq = maxDist * maxDist;
-
-    function rebuildConnections() {
-      // O(n²) but cheap with the early break and the line cap
-      let lineIdx = 0;
-      for (let i = 0; i < particleCount; i++) {
-        const ix = positions[i * 3];
-        const iy = positions[i * 3 + 1];
-        const iz = positions[i * 3 + 2];
-        for (let j = i + 1; j < particleCount; j++) {
-          const dx = ix - positions[j * 3];
-          const dy = iy - positions[j * 3 + 1];
-          const dz = iz - positions[j * 3 + 2];
-          const d2 = dx * dx + dy * dy + dz * dz;
-          if (d2 < maxDistSq) {
-            const base = lineIdx * 6;
-            lineArr[base]     = ix;
-            lineArr[base + 1] = iy;
-            lineArr[base + 2] = iz;
-            lineArr[base + 3] = positions[j * 3];
-            lineArr[base + 4] = positions[j * 3 + 1];
-            lineArr[base + 5] = positions[j * 3 + 2];
-            lineIdx++;
-            if (lineIdx >= maxLines) break;
-          }
-        }
-        if (lineIdx >= maxLines) break;
-      }
-      lineGeo.setDrawRange(0, lineIdx * 2);
-      lineGeo.attributes.position.needsUpdate = true;
-    }
 
     function animate() {
       requestAnimationFrame(animate);
@@ -188,41 +200,53 @@
       mouse.x += (mouse.tx - mouse.x) * 0.05;
       mouse.y += (mouse.ty - mouse.y) * 0.05;
 
-      // ---- 1) Drift each particle around its base position (slow, organic)
+      // ---- 1) Data wave through the grid.
+      // Two interfering sine waves create an organic rolling pattern.
       for (let i = 0; i < particleCount; i++) {
-        const phase = phases[i];
         const base = i * 3;
-        positions[base]     = basePos[base]     + Math.sin(t * 0.30 + phase)        * 0.18;
-        positions[base + 1] = basePos[base + 1] + Math.cos(t * 0.22 + phase * 1.3)  * 0.18;
-        positions[base + 2] = basePos[base + 2] + Math.sin(t * 0.18 + phase * 0.7)  * 0.18;
+        const x = basePos[base];
+        const y = basePos[base + 1];
+
+        // Primary traveling wave
+        const wave1 = Math.sin(x * 0.55 - t * 0.95) * 0.30;
+        // Secondary wave at an angle, slower
+        const wave2 = Math.cos((x * 0.30 + y * 0.40) + t * 0.55) * 0.18;
+        // Tiny per-point breathing
+        const breath = Math.sin(t * 0.6 + phases[i]) * 0.04;
+
+        positions[base + 2] = wave1 + wave2 + breath;
       }
       particleGeo.attributes.position.needsUpdate = true;
 
-      // ---- 2) Pulse wave: every 12s, a wave expands outward from center.
-      // Particles at the wave front briefly get a size + alpha boost.
-      const cycleT = (t % 12) / 12;            // 0..1
-      const pulseR = cycleT * 7.5;             // expand to radius 7.5
-      const pulseFade = 1 - cycleT;            // overall fade as wave expands
-      for (let i = 0; i < particleCount; i++) {
-        const base = i * 3;
-        const dx = positions[base];
-        const dy = positions[base + 1];
-        const r = Math.sqrt(dx * dx + dy * dy);
-        // Distance from current wave front
-        const distFromFront = Math.abs(r - pulseR);
-        // Peak boost when very close to the front
-        const boost = Math.max(0, 1 - distFromFront * 1.4) * pulseFade;
-        sizes[i] = baseSizes[i] + boost * 1.4;
+      // ---- 2) Coral points pulse subtly to read as "active data"
+      for (let k = 0; k < coralIndices.length; k++) {
+        const i = coralIndices[k];
+        const pulse = 2.4 + Math.sin(t * 1.6 + i * 0.7) * 0.6;
+        sizes[i] = pulse;
       }
       particleGeo.attributes.size.needsUpdate = true;
 
-      // ---- 3) Whole-cloud rotation + mouse parallax
-      particles.rotation.y = t * 0.025 + mouse.x * 0.15;
-      particles.rotation.x = mouse.y * 0.10;
-      lines.rotation.copy(particles.rotation);
+      // ---- 3) Rebuild line positions to follow the wave
+      for (let li = 0; li < lineConnections.length; li++) {
+        const [a, b] = lineConnections[li];
+        const base = li * 6;
+        lineArr[base]     = positions[a * 3];
+        lineArr[base + 1] = positions[a * 3 + 1];
+        lineArr[base + 2] = positions[a * 3 + 2];
+        lineArr[base + 3] = positions[b * 3];
+        lineArr[base + 4] = positions[b * 3 + 1];
+        lineArr[base + 5] = positions[b * 3 + 2];
+      }
+      lineGeo.attributes.position.needsUpdate = true;
 
-      // ---- 4) Rebuild breathing connections
-      rebuildConnections();
+      // ---- 4) Subtle global line opacity breathing
+      lineMat.opacity = 0.11 + Math.sin(t * 0.4) * 0.03;
+
+      // ---- 5) Light mouse parallax on top of the static tilt
+      particles.rotation.y = mouse.x * 0.12;
+      particles.rotation.x = -0.18 - mouse.y * 0.06;
+      lines.rotation.y = particles.rotation.y;
+      lines.rotation.x = particles.rotation.x;
 
       renderer.render(scene, camera);
     }
