@@ -299,7 +299,7 @@ input, textarea {
 
 .hero__title {
   margin-top: 32px;
-  font-size: clamp(56px, 9.5vw, 144px);
+  font-size: clamp(56px, 9.5vw, 132px);
   line-height: 0.94;
   letter-spacing: -0.05em;
   font-weight: 700;
@@ -338,13 +338,15 @@ input, textarea {
   to   { transform: scaleX(1); }
 }
 
-/* Rotating word in hero title */
+/* Rotating word in hero title — min-width tracks the widest word
+   (currently "scales" / "builds" / "learns" at 6 chars). Keep a real
+   safety margin so nothing clips on first paint or any future word. */
 .hero__rotator {
   display: inline-grid;
   grid-template-areas: "stack";
   vertical-align: baseline;
   text-align: left;
-  min-width: 5.5ch;
+  min-width: 8ch;
 }
 
 .hero__rotator > span {
