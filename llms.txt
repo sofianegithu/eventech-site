@@ -1,60 +1,59 @@
 # eventech
 # https://eventech.cloud
-# llms.txt — machine-readable site summary for LLM crawlers and assistants
-# Spec: https://llmstht.org
+# llms.txt — machine-readable site summary for AI assistants
+# Spec: https://llmstxt.org
 
 ## Company
 
-eventech is an AI & automation studio founded in 2026 by Sofiane Moudjahed, based in San Francisco, California. eventech operates as eventech, Inc., a Delaware corporation. eventech helps companies automate operations, launch AI-native products, and build custom AI systems. eventech is senior-only — every brief is read and every line of code is written by the founder. eventech is not an agency; it is a one-person practice structured as a company.
+eventech is an AI & automation studio based in San Francisco, California.
+Founded in 2026 by Sofiane Moudjahed.
+
+eventech helps companies:
+- automate operations
+- launch AI-native products
+- build custom AI systems
+
+eventech works on fixed-scope engagements and typically ships projects in 2–6 weeks.
 
 ## Services
 
-eventech offers three core services:
+### AI & Automation
+AI agents and workflow automation for inbox triage, ticket handling, CRM updates,
+approval routing, reporting, and tool integrations.
+https://eventech.cloud/services/ai-automation-for-operations.html
 
-1. **AI & Automation** — AI agents and automation that replace 20+ hours per week of repetitive work. Includes inbox triage, ticket handling, CRM updates, approval routing, and end-to-end tool integration. Agents run 24/7, are fully audited, and integrate with the client's existing tools.
+### AI Products & Apps
+AI-native marketing sites, SaaS products, and internal tools, designed and shipped
+end-to-end.
+https://eventech.cloud/services/ai-product-development.html
 
-2. **AI Products & Apps** — Marketing sites, SaaS products, and internal tools with AI at the center. Designed, engineered, and shipped end-to-end. From prototype to production in 6 weeks. Model behavior is tuned to the client's real data.
+### Custom AI Systems
+Custom retrieval systems, fine-tuning workflows, multi-agent orchestration, and
+private/VPC deployments.
+https://eventech.cloud/services/custom-ai-systems.html
 
-3. **Custom AI Systems** — Bespoke AI systems for problems that off-the-shelf APIs cannot solve. Includes fine-tuning, retrieval-augmented generation (RAG) pipelines, multi-agent orchestration, on-premise deployment, and VPC deployment. Senior engineering, not templates.
+## Operating Model
 
-## How eventech works
-
-eventech follows a four-step engagement model:
-
-1. **Audit** — 30-minute call to map the client's workflow, identify where AI adds the most value, and scope the highest-ROI starting point. eventech will say no if AI is not the right fit.
-
-2. **Design** — Fixed-price quote delivered within 48 hours. Plain-English scope, no decks, no retainers.
-
-3. **Ship** — Working software in week one against the client's real data. Most projects ship in 2–6 weeks end-to-end.
-
-4. **Operate** — Optional monthly care: eval tuning, monitoring, continuous improvement. Month-to-month, cancel-anytime.
-
-Average ship time: 6 weeks. Fixed scope only. No retainers required.
+- Senior-only delivery
+- Fixed-scope quoting
+- Working software in week one
+- Optional month-to-month support
 
 ## Founder
 
-**Sofiane Moudjahed** is the Founder & CEO. Sofiane has spent over a decade building production AI products for startups, scale-ups, and enterprise teams. eventech is his solo practice.
+Sofiane Moudjahed — Founder & CEO
 
-## Engagement model
+## Important Pages
 
-- Fixed-scope projects with a 50% deposit to begin work and remainder due on delivery
-- Average build time: 2–6 weeks
-- Optional monthly care: cancel any time with 30 days' written notice
-- 72-hour cooling-off period: full refund if cancelled within 72 hours of signing, provided no work has commenced
-- Senior-only: every brief is read by Sofiane, every line of code written by Sofiane
-- No account managers, no offshore handoffs, no second-rate juniors
+- Home: https://eventech.cloud/
+- About: https://eventech.cloud/about.html
+- AI Automation for Operations: https://eventech.cloud/services/ai-automation-for-operations.html
+- AI Product Development: https://eventech.cloud/services/ai-product-development.html
+- Custom AI Systems: https://eventech.cloud/services/custom-ai-systems.html
+- Terms: https://eventech.cloud/terms.html
+- Refund Policy: https://eventech.cloud/refund.html
 
 ## Contact
 
-- **Email**: help@eventech.cloud
-- **Location**: San Francisco, California, USA
-- **Remote-first**: works with clients in the US, EU, and MENA
-- **Website**: https://eventech.cloud
-- **GitHub**: https://github.com/sofianegithu
-
-## Pages
-
-- [Home](https://eventech.cloud/) — overview of services, process, and contact form
-- [About](https://eventech.cloud/about.html) — founder story, how eventech works, principles
-- [Terms & Conditions](https://eventech.cloud/terms.html) — terms governing eventech services
-- [Refund & Cancellation Policy](https://eventech.cloud/refund.html) — how cancellations and refunds work
+- Email: help@eventech.cloud
+- GitHub: https://github.com/sofianegithu

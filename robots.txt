@@ -1,6 +1,35 @@
 # eventech.cloud — robots.txt
 # https://eventech.cloud
 
+# OpenAI's ChatGPT search crawler (explicit allow for visibility in search)
+User-agent: OAI-SearchBot
+Allow: /
+
+# OpenAI training crawler
+User-agent: GPTBot
+Allow: /
+
+# Anthropic
+User-agent: ClaudeBot
+Allow: /
+User-agent: anthropic-ai
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+# Google AI training signal
+User-agent: Google-Extended
+Allow: /
+
+# Common web crawlers
+User-agent: Googlebot
+Allow: /
+User-agent: Bingbot
+Allow: /
+
+# Default: everything else allowed, except internal API paths
 User-agent: *
 Allow: /
 Disallow: /api/
@@ -8,6 +37,6 @@ Disallow: /api/
 # Sitemap
 Sitemap: https://eventech.cloud/sitemap.xml
 
-# LLM-readable site summary (for AI crawlers)
-# See https://llmstxt.org for spec
+# LLM-readable site summary (for AI assistants)
+# Spec: https://llmstxt.org
 Allow: /llms.txt

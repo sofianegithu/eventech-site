@@ -1212,6 +1212,104 @@ input, textarea {
 }
 
 /* =========================================================
+   Service pages nav (cross-link block above footer on home)
+   ========================================================= */
+.service-pages-nav {
+  padding: 60px 0 100px;
+  border-top: 1px solid var(--hair);
+  background: var(--bg-soft);
+}
+
+.service-pages-nav__head {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+.service-pages-nav__eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.service-pages-nav__sub {
+  font-size: 15px;
+  color: var(--muted);
+  margin: 0;
+}
+
+.service-pages-nav nav ul {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--hair);
+  border-bottom: 1px solid var(--hair);
+}
+
+.service-pages-nav nav li {
+  border-right: 1px solid var(--hair);
+  padding: 28px 24px 28px 0;
+}
+
+.service-pages-nav nav li:last-child {
+  border-right: none;
+}
+
+.service-pages-nav nav li:not(:first-child) {
+  padding-left: 24px;
+}
+
+.service-pages-nav nav a {
+  font-size: 17px;
+  line-height: 1.4;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.015em;
+  transition: color var(--t-fast) var(--ease);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.service-pages-nav nav a::after {
+  content: '→';
+  font-size: 16px;
+  color: var(--muted);
+  transition: transform var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+
+.service-pages-nav nav a:hover {
+  color: var(--ink);
+}
+
+.service-pages-nav nav a:hover::after {
+  transform: translateX(3px);
+  color: var(--ink);
+}
+
+@media (max-width: 768px) {
+  .service-pages-nav nav ul {
+    grid-template-columns: 1fr;
+  }
+  .service-pages-nav nav li {
+    border-right: none;
+    border-bottom: 1px solid var(--hair);
+    padding: 20px 0;
+  }
+  .service-pages-nav nav li:last-child {
+    border-bottom: none;
+  }
+  .service-pages-nav nav li:not(:first-child) {
+    padding-left: 0;
+  }
+}
+
+/* =========================================================
    FAQ
    ========================================================= */
 .faq {
