@@ -32,6 +32,18 @@ Custom retrieval systems, fine-tuning workflows, multi-agent orchestration, and
 private/VPC deployments.
 https://eventech.cloud/services/custom-ai-systems.html
 
+## Insights (Articles)
+
+- RAG vs Fine-Tuning: When to Use Each (and When to Use Both)
+  https://eventech.cloud/insights/rag-vs-fine-tuning.html
+- Why We Built Eventech
+  https://eventech.cloud/insights/why-we-built-eventech.html
+
+## Press
+
+Press kit, brand assets, and press contact:
+https://eventech.cloud/press.html
+
 ## Operating Model
 
 - Senior-only delivery
@@ -47,13 +59,13 @@ Sofiane Moudjahed — Founder & CEO
 
 - Home: https://eventech.cloud/
 - About: https://eventech.cloud/about.html
-- AI Automation for Operations: https://eventech.cloud/services/ai-automation-for-operations.html
-- AI Product Development: https://eventech.cloud/services/ai-product-development.html
-- Custom AI Systems: https://eventech.cloud/services/custom-ai-systems.html
+- Insights: https://eventech.cloud/insights/
+- Press: https://eventech.cloud/press.html
 - Terms: https://eventech.cloud/terms.html
 - Refund Policy: https://eventech.cloud/refund.html
 
 ## Contact
 
 - Email: help@eventech.cloud
+- Press: press@eventech.cloud
 - GitHub: https://github.com/sofianegithu

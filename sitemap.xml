@@ -22,6 +22,34 @@
   </url>
 
   <url>
+    <loc>https://eventech.cloud/press.html</loc>
+    <lastmod>2026-08-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://eventech.cloud/insights/</loc>
+    <lastmod>2026-08-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://eventech.cloud/insights/rag-vs-fine-tuning.html</loc>
+    <lastmod>2026-08-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://eventech.cloud/insights/why-we-built-eventech.html</loc>
+    <lastmod>2026-08-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
     <loc>https://eventech.cloud/services/ai-automation-for-operations.html</loc>
     <lastmod>2026-08-30</lastmod>
     <changefreq>monthly</changefreq>
